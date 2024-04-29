@@ -93,7 +93,6 @@ func enable_preview_mode()-> void:
     preview_mode = true
     
     # darken backdround
-    #preview_mode_dimmer.
     preview_mode_dimmer.color = Color(0, 0, 0, .5)
     # set nodes to initital state. StartNode complete. All outputs of StartNode
     # pending. All other nodes locked 
