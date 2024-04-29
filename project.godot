@@ -128,7 +128,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="DatingSim"
+config/name="DatingSim(3.5)"
 config/description="Al's Starlight Diner is a sci-fi romance and narrative driven game set in the near future. "
 run/main_scene="res://scenes/GameManager.tscn"
 config/icon="res://icon.png"
