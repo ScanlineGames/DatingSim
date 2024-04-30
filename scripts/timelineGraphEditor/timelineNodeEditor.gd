@@ -16,7 +16,7 @@ const DEFAULT_TL_STRUCTURE_NAME: String = "UNNAMED"
 
 onready var preview_mode_dimmer: ColorRect = get_node("PreviewModeDimmer")
 onready var timeline_structure_name_lable: Label = get_node("MarginContainer/LabelTimelineStructureName")
-# Timelein node graph datastructure
+# Timeleine node graph datastructure
 # Key: title, Value: TimelineNodeData
 var timeline_structure_data: Dictionary = {}
 
@@ -27,7 +27,7 @@ var preview_mode: bool = false
 var timeline_structure_name: String = DEFAULT_TL_STRUCTURE_NAME
 # true if active delete request
 var delete_request: bool = false
-
+var timeline_structure_processor: TimelineStructureProcessor
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -42,6 +42,7 @@ func _ready() -> void:
     error = SignalManager.connect("load_timeline_structure_as_confirm_button_pressed", self, "_on_load_timeline_structure_as_confirm_button_pressed" )
     error = SignalManager.connect("graphNode_close_request", self, "_on_GraphNode_close_request")
     # Init start and end nodes. Same behavior as new graph?
+    timeline_structure_processor = TimelineStructureProcessor.new({})
     popualte_start_and_end()
     
     set_timeline_strucutre_name(timeline_structure_name)
@@ -328,7 +329,8 @@ func _on_GraphEdit__end_node_move() -> void:
     # save all graph node offsets
     for child in get_children():
         if child is GraphNode:
-            timeline_structure_data[child.title].offset = child.offset
+            timeline_structure_processor.set_offset(child.title, child.offset)
+
 
 
 func _on_GraphEdit_connection_request(from: String, from_slot: int, to: String, to_slot: int) -> void:
@@ -341,10 +343,8 @@ func _on_GraphEdit_connection_request(from: String, from_slot: int, to: String, 
     var from_title = get_node(from).title
     var to_title = get_node(to).title
     # update prereq lists
-    if !timeline_structure_data[from_title].outputs.has(to_title):
-        timeline_structure_data[from_title].outputs.append(to_title)
-    if !timeline_structure_data[to_title].inputs.has(from_title):
-        timeline_structure_data[to_title].inputs.append(from_title)
+    timeline_structure_processor.connect_timelines(from_title, to_title)
+
 
 #
 #func _on_GraphEdit_child_entered_tree(node: Node) -> void:
