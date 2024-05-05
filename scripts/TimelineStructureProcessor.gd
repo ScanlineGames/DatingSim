@@ -42,7 +42,7 @@ func _init(timeline_structure_json_dict: Dictionary = {}) -> void:
     # init pending, locked, complete arrays
     for key in timeline_structure_data:
         # add nodes with no inputs to pending
-        if len(timeline_structure_data[key].inputs) == 0 &&\
+        if len(timeline_structure_data[key].inputs) == 0 && \
            !pending_timeline_names.has(key):
             pending_timeline_names.append(key)
         else:
@@ -77,11 +77,13 @@ func complete_pending(timeline_name: String)->void:
     else:
         printerr("Timeline not found in pending names: ", timeline_name)
     
-    # TODO: set locked timelines connected to given timeline to pending
+    # set locked timelines connected to given timeline to pending
     for output_name in timeline_structure_data[timeline_name].outputs:
         if locked_timeline_names.has(output_name):
             locked_timeline_names.remove(locked_timeline_names.find(output_name))
             pending_timeline_names.append(output_name)
+            
+    # TODO: update logic nodes?
 
 
 func connect_timelines(from_title: String, to_title: String)->void:
@@ -104,7 +106,7 @@ func clear() -> void:
     pending_timeline_names = []
     locked_timeline_names = []
 
-# update pending, locked, complete
+# update pending, locked, complete?
 func update()->void:
     pass
 
@@ -117,7 +119,7 @@ func save_timeline_structure() -> void:
     Utility.save_dict_as_json(Utility.game_manager.TL_STRUCTURE_DATA_LOCATION + timeline_structure_name + ".json", dict_to_save)
 
 
-func set_offset(timeline_name: String, new_offset: int)->void:
+func set_offset(timeline_name: String, new_offset: Vector2)->void:
     if timeline_structure_data.has(timeline_name):
         timeline_structure_data[timeline_name].offset = new_offset
     else:
