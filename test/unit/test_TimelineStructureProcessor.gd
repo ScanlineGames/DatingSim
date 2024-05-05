@@ -12,8 +12,6 @@ func after_each():
     
     
 func test_init():
-
-
     assert_ne(len(timeline_structure_processor.pending_timeline_names), 0, "TimelineStructureProcessor should have at least 1 pending scene after loading")
 
     
@@ -30,3 +28,8 @@ func test_complete_pending():
         outputs_pending = outputs_pending && timeline_structure_processor.pending_timeline_names.has(output_name)
         
     assert_eq(outputs_pending, true, timeline_name + " outputs should be in pending array")
+
+func test_add_timeline():
+    
+    timeline_structure_processor.add_timeline()
+    pass
